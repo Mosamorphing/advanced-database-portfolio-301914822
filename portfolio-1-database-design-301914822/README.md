@@ -23,7 +23,7 @@ Institutions are represented as researcher affiliations in the selected scope; t
 
 The database stores information about:
 
-- Users and their institutional affiliations.
+- Authors and their institutional affiliations.
 - Institutions represented on the platform.
 - Research fields and their categories.
 - Academic papers and their descriptive metadata.
@@ -37,7 +37,7 @@ The research documents themselves may be held by an external document-storage se
 
 The database supports operations such as:
 
-- Registering researchers and associating them with institutions.
+- Registering user accounts and, where applicable, associating author profiles with institutions.
 - Submitting and managing academic-paper records.
 - Classifying papers by research field, category, and keyword.
 - Reviewing submissions and recording their publication status.
@@ -50,3 +50,7 @@ The database supports operations such as:
 The database model developed in this activity covers the core research-publication domain: users, institutions, research fields, categories, papers, keywords, moderation, and comments. Authentication infrastructure, donations, project-showcase submissions, email delivery, and frontend implementation are outside the scope of this activity.
 
 Nubian Research has been in operation since December 2024. The database models, analysis, implementation evidence, and explanations presented in this portfolio are produced specifically for this individual assessment.
+
+## ER Diagram
+
+The proposed entity-relationship model is documented in the [ER diagram](./er-diagram.md).
