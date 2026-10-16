@@ -4,7 +4,6 @@
 
 - Database: PostgreSQL 17
 - Dataset: Synthetic records using the reserved `example.test` domain
-- Production data: None
 
 ## Reproduction
 
@@ -84,8 +83,6 @@ psql -U postgres -d nubian_portfolio_lab \
 
 `schema.sql` creates the `nubian_portfolio` namespace and its relations. `validate-schema.sql` begins a transaction, inserts a small connected dataset, runs validation queries and rolls the data back. The schema remains available while the synthetic test records are removed.
 
-Google Colab is not required for this exercise and does not provide a built-in option for selecting PostgreSQL 17 in the way it provides Python runtimes. PostgreSQL can be installed inside a Colab session, but Docker or an existing local PostgreSQL installation provides a simpler and more reproducible environment.
-
 ## Why `example.test` is used
 
 The `.test` top-level domain is reserved for documentation and testing. Addresses such as `ada.researcher@example.test` cannot accidentally target a real organisation's email domain. They are synthetic identifiers only; no email service or website needs to be visited.
@@ -122,5 +119,3 @@ NOTICE: PASS: invalid paper status was rejected
 NOTICE: PASS: rejected review without a reason was rejected
 ROLLBACK
 ```
-
-The scripts contain no production records, credentials or internal infrastructure details.
