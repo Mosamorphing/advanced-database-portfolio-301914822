@@ -4,7 +4,7 @@ This document translates the proposed ER model into relations. The names use plu
 
 ## Relational schema
 
-The notation `PK`, `FK`, `AK` and `NULL` identifies primary keys, foreign keys, alternate keys and optional attributes respectively.
+The notation `PK`, `FK`, `AK`, `UQ` and `NULL` identifies primary keys, foreign keys, alternate keys, supporting unique constraints and optional attributes respectively.
 
 ```text
 users(
@@ -93,6 +93,7 @@ comments(
     body,
     created_at,
     updated_at,
+    UQ(comment_id, paper_id),
     FK(parent_comment_id, paper_id)
         -> comments(comment_id, paper_id)
 )
@@ -142,6 +143,7 @@ The PostgreSQL implementation applies the following integrity rules:
 - An ORCID, when supplied, must match the standard four-block textual format.
 - A comment cannot be its own parent.
 - A reply and its parent must belong to the same paper.
+- The supporting uniqueness rule on `(comment_id, paper_id)` allows the composite parent reference to enforce that same-paper rule. It is not a separate candidate key because `comment_id` is already unique.
 - Updated timestamps cannot precede their corresponding creation timestamps.
 
 Two rules cannot be expressed reliably using ordinary row-level keys and checks alone:

@@ -62,3 +62,7 @@ The ER model is translated into relations in the [relational schema](./relationa
 ## Normalisation
 
 The progression from an unnormalised paper-submission record to the final third-normal-form design is explained in the [normalisation document](./normalisation.md).
+
+## Validation Evidence
+
+The schema implementation and its principal integrity rules are exercised by [`validate-schema.sql`](./sql/validate-schema.sql). The reproducible procedure and results are recorded in the [validation report](./validation.md).
