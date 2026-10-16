@@ -121,9 +121,9 @@ erDiagram
 
 | Symbol | Meaning |
 | --- | --- |
-| `||` | Exactly one |
-| `o|` | Zero or one |
-| `|{` | One or many |
-| `o{` | Zero or many |
+| <code>&#124;&#124;</code> | Exactly one |
+| <code>o&#124;</code> | Zero or one |
+| <code>&#124;{</code> | One or many |
+| <code>o{</code> | Zero or many |
 
 The model deliberately excludes authentication sessions, donations, project-showcase submissions, email delivery, and deployment infrastructure, as seen on the live Nubian Research infrastructure. 
