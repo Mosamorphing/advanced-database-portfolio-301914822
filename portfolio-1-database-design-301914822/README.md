@@ -54,3 +54,7 @@ Nubian Research has been in operation since December 2024. The database models, 
 ## ER Diagram
 
 The proposed entity-relationship model is documented in the [ER diagram](./er-diagram.md).
+
+## Relational Schema, Keys and Constraints
+
+The ER model is translated into relations in the [relational schema](./relational-schema.md). Its executable PostgreSQL implementation is provided in [`schema.sql`](./sql/schema.sql).
