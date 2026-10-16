@@ -58,3 +58,7 @@ The proposed entity-relationship model is documented in the [ER diagram](./er-di
 ## Relational Schema, Keys and Constraints
 
 The ER model is translated into relations in the [relational schema](./relational-schema.md). Its executable PostgreSQL implementation is provided in [`schema.sql`](./sql/schema.sql).
+
+## Normalisation
+
+The progression from an unnormalised paper-submission record to the final third-normal-form design is explained in the [normalisation document](./normalisation.md).
