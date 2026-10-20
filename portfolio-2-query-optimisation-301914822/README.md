@@ -6,6 +6,14 @@ This activity continues the Nubian Research case study and uses the PostgreSQL s
 
 The analysis uses synthetic data only. It does not reproduce Nubian Research's production database, production records, private source code, or internal operational metrics.
 
+## Synthetic dataset declaration
+
+The dataset is generated locally by [`sql/seed-data.sql`](./sql/seed-data.sql) specifically for this assessment. The script uses PostgreSQL's `generate_series()` function and fixed arithmetic rules rather than production records, externally sourced datasets, or random values. It therefore produces the same relationships and row volumes each time it is run.
+
+The generated dataset contains 100 institutions, 10,000 users, 8,000 authors, 10 research fields, 100 categories, 50,000 papers, 60,000 paper-author associations, 200 keywords, 100,000 paper-keyword associations, 20 administrators, 45,000 paper reviews, and 100,000 comments. Names, email addresses, document references, abstracts, comments, classifications, timestamps, and status distributions are fictional. Email addresses use the reserved `example.test` domain.
+
+The volumes and distributions are deliberate testing assumptions chosen to make query-planning differences observable on an ordinary development computer. They do not represent measurements of Nubian Research's users, content, workload, growth, or performance. The dataset is suitable for reproducible query experiments but not for drawing conclusions about production behaviour.
+
 ## Query scope
 
 Five queries represent common operations in the research-publication domain:
