@@ -1,6 +1,6 @@
 SET search_path TO nubian_portfolio, public;
 
-\qecho 'Query 1 baseline: recent published papers by category'
+\qecho 'Query 1: recent published papers by category'
 EXPLAIN (ANALYZE, BUFFERS)
 SELECT
     p.paper_id,
@@ -15,7 +15,7 @@ WHERE p.status = 'published'
 ORDER BY p.created_at DESC
 LIMIT 20;
 
-\qecho 'Query 2 baseline: papers by author'
+\qecho 'Query 2: papers by author'
 EXPLAIN (ANALYZE, BUFFERS)
 SELECT
     a.author_id,
@@ -33,7 +33,7 @@ JOIN papers AS p
 WHERE a.author_id = 101
 ORDER BY p.created_at DESC;
 
-\qecho 'Query 3 baseline: threaded comments for a paper'
+\qecho 'Query 3: threaded comments for a paper'
 EXPLAIN (ANALYZE, BUFFERS)
 WITH RECURSIVE comment_thread AS (
     SELECT
@@ -75,7 +75,7 @@ SELECT
 FROM comment_thread
 ORDER BY traversal_path;
 
-\qecho 'Query 4 baseline: papers awaiting review'
+\qecho 'Query 4: papers awaiting review'
 EXPLAIN (ANALYZE, BUFFERS)
 SELECT
     p.paper_id,
@@ -92,7 +92,7 @@ WHERE p.status = 'pending'
 ORDER BY p.created_at
 LIMIT 20;
 
-\qecho 'Query 5 baseline: publication count by research field'
+\qecho 'Query 5: publication count by research field'
 EXPLAIN (ANALYZE, BUFFERS)
 SELECT
     f.field_id,
