@@ -37,16 +37,16 @@ The work will proceed in four stages:
 
 Primary-key and unique-constraint indexes created by Portfolio 1 remain part of the baseline. Any additional index must have a stated purpose; an index will not be retained merely because it exists.
 
-## Expected evidence
+## Evidence
 
-This portfolio will provide:
+This portfolio provides:
 
-- Executable SQL queries and synthetic seed data.
-- Query results demonstrating correctness.
-- Execution plans captured before optimisation.
-- SQL definitions for the selected indexes.
-- Execution plans captured after optimisation.
-- A brief performance analysis comparing the evidence and explaining the design choices.
+- Executable [`queries.sql`](./sql/queries.sql) and [`seed-data.sql`](./sql/seed-data.sql).
+- [`query-results.txt`](./evidence/query-results.txt), demonstrating that the five queries return the intended results.
+- [`plans-before.txt`](./evidence/plans-before.txt), captured before optimisation.
+- [`indexes.sql`](./sql/indexes.sql), containing the four justified index definitions.
+- [`plans-after.txt`](./evidence/plans-after.txt), captured after optimisation.
+- A [performance analysis](./performance-analysis.md) comparing the plans and explaining the design choices.
 
 ## Reproducibility
 

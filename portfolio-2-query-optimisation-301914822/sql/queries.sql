@@ -1,6 +1,7 @@
 SET search_path TO nubian_portfolio, public;
 
 -- Query 1: Retrieve the 20 most recent published papers in category 42.
+\qecho 'Query 1: recent published papers by category'
 SELECT
     p.paper_id,
     p.title,
@@ -15,6 +16,7 @@ ORDER BY p.created_at DESC
 LIMIT 20;
 
 -- Query 2: Retrieve every paper credited to author 101.
+\qecho 'Query 2: papers by author'
 SELECT
     a.author_id,
     a.full_name,
@@ -32,6 +34,7 @@ WHERE a.author_id = 101
 ORDER BY p.created_at DESC;
 
 -- Query 3: Retrieve the comment thread for paper 4242.
+\qecho 'Query 3: threaded comments for a paper'
 WITH RECURSIVE comment_thread AS (
     SELECT
         c.comment_id,
@@ -73,6 +76,7 @@ FROM comment_thread
 ORDER BY traversal_path;
 
 -- Query 4: Retrieve the 20 oldest papers still awaiting review.
+\qecho 'Query 4: papers awaiting review'
 SELECT
     p.paper_id,
     p.title,
@@ -89,6 +93,7 @@ ORDER BY p.created_at
 LIMIT 20;
 
 -- Query 5: Count published papers in each research field.
+\qecho 'Query 5: publication count by research field'
 SELECT
     f.field_id,
     f.name AS field_name,

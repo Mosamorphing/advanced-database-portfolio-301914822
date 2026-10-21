@@ -1,0 +1,92 @@
+SET
+Query 1: recent published papers by category
+ paper_id |             title              |     category_name     |       created_at       
+----------+--------------------------------+-----------------------+------------------------
+    49942 | Synthetic Research Paper 49942 | Research Category 042 | 2025-06-04 05:30:00+00
+    49842 | Synthetic Research Paper 49842 | Research Category 042 | 2025-06-03 04:30:00+00
+    49742 | Synthetic Research Paper 49742 | Research Category 042 | 2025-06-02 03:30:00+00
+    49642 | Synthetic Research Paper 49642 | Research Category 042 | 2025-06-01 02:30:00+00
+    49542 | Synthetic Research Paper 49542 | Research Category 042 | 2025-05-31 01:30:00+00
+    49442 | Synthetic Research Paper 49442 | Research Category 042 | 2025-05-30 00:30:00+00
+    49342 | Synthetic Research Paper 49342 | Research Category 042 | 2025-05-28 23:30:00+00
+    49242 | Synthetic Research Paper 49242 | Research Category 042 | 2025-05-27 22:30:00+00
+    49142 | Synthetic Research Paper 49142 | Research Category 042 | 2025-05-26 21:30:00+00
+    49042 | Synthetic Research Paper 49042 | Research Category 042 | 2025-05-25 20:30:00+00
+    48942 | Synthetic Research Paper 48942 | Research Category 042 | 2025-05-24 19:30:00+00
+    48842 | Synthetic Research Paper 48842 | Research Category 042 | 2025-05-23 18:30:00+00
+    48742 | Synthetic Research Paper 48742 | Research Category 042 | 2025-05-22 17:30:00+00
+    48642 | Synthetic Research Paper 48642 | Research Category 042 | 2025-05-21 16:30:00+00
+    48542 | Synthetic Research Paper 48542 | Research Category 042 | 2025-05-20 15:30:00+00
+    48442 | Synthetic Research Paper 48442 | Research Category 042 | 2025-05-19 14:30:00+00
+    48342 | Synthetic Research Paper 48342 | Research Category 042 | 2025-05-18 13:30:00+00
+    48242 | Synthetic Research Paper 48242 | Research Category 042 | 2025-05-17 12:30:00+00
+    48142 | Synthetic Research Paper 48142 | Research Category 042 | 2025-05-16 11:30:00+00
+    48042 | Synthetic Research Paper 48042 | Research Category 042 | 2025-05-15 10:30:00+00
+(20 rows)
+
+Query 2: papers by author
+ author_id |       full_name        | paper_id |             title              | author_order |  status  |       created_at       
+-----------+------------------------+----------+--------------------------------+--------------+----------+------------------------
+       101 | Synthetic Author 00101 |    48101 | Synthetic Research Paper 48101 |            1 | rejected | 2025-05-16 01:15:00+00
+       101 | Synthetic Author 00101 |    48100 | Synthetic Research Paper 48100 |            2 | pending  | 2025-05-16 01:00:00+00
+       101 | Synthetic Author 00101 |    40101 | Synthetic Research Paper 40101 |            1 | rejected | 2025-02-21 17:15:00+00
+       101 | Synthetic Author 00101 |    40100 | Synthetic Research Paper 40100 |            2 | pending  | 2025-02-21 17:00:00+00
+       101 | Synthetic Author 00101 |    32101 | Synthetic Research Paper 32101 |            1 | rejected | 2024-11-30 09:15:00+00
+       101 | Synthetic Author 00101 |    32100 | Synthetic Research Paper 32100 |            2 | pending  | 2024-11-30 09:00:00+00
+       101 | Synthetic Author 00101 |    24101 | Synthetic Research Paper 24101 |            1 | rejected | 2024-09-08 01:15:00+00
+       101 | Synthetic Author 00101 |    24100 | Synthetic Research Paper 24100 |            2 | pending  | 2024-09-08 01:00:00+00
+       101 | Synthetic Author 00101 |    16101 | Synthetic Research Paper 16101 |            1 | rejected | 2024-06-16 17:15:00+00
+       101 | Synthetic Author 00101 |    16100 | Synthetic Research Paper 16100 |            2 | pending  | 2024-06-16 17:00:00+00
+       101 | Synthetic Author 00101 |     8101 | Synthetic Research Paper 08101 |            1 | rejected | 2024-03-25 09:15:00+00
+       101 | Synthetic Author 00101 |     8100 | Synthetic Research Paper 08100 |            2 | pending  | 2024-03-25 09:00:00+00
+       101 | Synthetic Author 00101 |      101 | Synthetic Research Paper 00101 |            1 | rejected | 2024-01-02 01:15:00+00
+       101 | Synthetic Author 00101 |      100 | Synthetic Research Paper 00100 |            2 | pending  | 2024-01-02 01:00:00+00
+(14 rows)
+
+Query 3: threaded comments for a paper
+ comment_id | parent_comment_id | author_user_id | depth |                    body                     |       created_at       
+------------+-------------------+----------------+-------+---------------------------------------------+------------------------
+       4242 |                   |           4243 |     0 | Synthetic top-level comment for paper 4242. | 2024-02-16 04:30:00+00
+      54242 |              4242 |           4244 |     1 | Synthetic reply for paper 4242.             | 2024-02-16 05:30:00+00
+(2 rows)
+
+Query 4: papers awaiting review
+ paper_id |             title              |     submitted_by     |     category_name     |       created_at       
+----------+--------------------------------+----------------------+-----------------------+------------------------
+       10 | Synthetic Research Paper 00010 | Synthetic User 00010 | Research Category 010 | 2024-01-01 02:30:00+00
+       20 | Synthetic Research Paper 00020 | Synthetic User 00020 | Research Category 020 | 2024-01-01 05:00:00+00
+       30 | Synthetic Research Paper 00030 | Synthetic User 00030 | Research Category 030 | 2024-01-01 07:30:00+00
+       40 | Synthetic Research Paper 00040 | Synthetic User 00040 | Research Category 040 | 2024-01-01 10:00:00+00
+       50 | Synthetic Research Paper 00050 | Synthetic User 00050 | Research Category 050 | 2024-01-01 12:30:00+00
+       60 | Synthetic Research Paper 00060 | Synthetic User 00060 | Research Category 060 | 2024-01-01 15:00:00+00
+       70 | Synthetic Research Paper 00070 | Synthetic User 00070 | Research Category 070 | 2024-01-01 17:30:00+00
+       80 | Synthetic Research Paper 00080 | Synthetic User 00080 | Research Category 080 | 2024-01-01 20:00:00+00
+       90 | Synthetic Research Paper 00090 | Synthetic User 00090 | Research Category 090 | 2024-01-01 22:30:00+00
+      100 | Synthetic Research Paper 00100 | Synthetic User 00100 | Research Category 100 | 2024-01-02 01:00:00+00
+      110 | Synthetic Research Paper 00110 | Synthetic User 00110 | Research Category 010 | 2024-01-02 03:30:00+00
+      120 | Synthetic Research Paper 00120 | Synthetic User 00120 | Research Category 020 | 2024-01-02 06:00:00+00
+      130 | Synthetic Research Paper 00130 | Synthetic User 00130 | Research Category 030 | 2024-01-02 08:30:00+00
+      140 | Synthetic Research Paper 00140 | Synthetic User 00140 | Research Category 040 | 2024-01-02 11:00:00+00
+      150 | Synthetic Research Paper 00150 | Synthetic User 00150 | Research Category 050 | 2024-01-02 13:30:00+00
+      160 | Synthetic Research Paper 00160 | Synthetic User 00160 | Research Category 060 | 2024-01-02 16:00:00+00
+      170 | Synthetic Research Paper 00170 | Synthetic User 00170 | Research Category 070 | 2024-01-02 18:30:00+00
+      180 | Synthetic Research Paper 00180 | Synthetic User 00180 | Research Category 080 | 2024-01-02 21:00:00+00
+      190 | Synthetic Research Paper 00190 | Synthetic User 00190 | Research Category 090 | 2024-01-02 23:30:00+00
+      200 | Synthetic Research Paper 00200 | Synthetic User 00200 | Research Category 100 | 2024-01-03 02:00:00+00
+(20 rows)
+
+Query 5: publication count by research field
+ field_id |    field_name     | published_paper_count 
+----------+-------------------+-----------------------
+        1 | Research Field 01 |                  4000
+        2 | Research Field 02 |                  4000
+        3 | Research Field 03 |                  4000
+        4 | Research Field 04 |                  4000
+        5 | Research Field 05 |                  4000
+        6 | Research Field 06 |                  4000
+        7 | Research Field 07 |                  4000
+        8 | Research Field 08 |                  4000
+        9 | Research Field 09 |                  4000
+       10 | Research Field 10 |                  4000
+(10 rows)
+
