@@ -15,7 +15,7 @@ The principal users represented in the case study are:
 
 - **Researchers and authors**, who create profiles and submit academic papers.
 - **Readers and registered community members**, who discover published papers and participate in discussions.
-- **Administrators and reviewers**, who assess submitted papers and manage their publication status.
+- **An authorised administrator/reviewer**, who assesses submitted papers and manages their publication status.
 
 Institutions are represented as researcher affiliations in the selected scope; they are not treated as system users with institutional accounts.
 
