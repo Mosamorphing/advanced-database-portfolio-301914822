@@ -1,0 +1,7 @@
+SET
+Uncontrolled concurrency final state
+           document_reference            | final_status | review_count |  recorded_decisions  
+-----------------------------------------+--------------+--------------+----------------------
+ portfolio3/uncontrolled-concurrency.pdf | published    |            2 | rejected -> approved
+(1 row)
+

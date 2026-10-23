@@ -1,0 +1,24 @@
+SET
+Uncontrolled Session A: begin approval request
+BEGIN
+ transaction_isolation 
+-----------------------
+ read committed
+(1 row)
+
+Uncontrolled Session A: initial paper state
+           document_reference            | status  
+-----------------------------------------+---------
+ portfolio3/uncontrolled-concurrency.pdf | pending
+(1 row)
+
+Uncontrolled Session A: pause while Session B acts on the same pending state
+ pg_sleep 
+----------
+ 
+(1 row)
+
+INSERT 0 1
+UPDATE 1
+COMMIT
+Uncontrolled Session A: approval committed after Session B
