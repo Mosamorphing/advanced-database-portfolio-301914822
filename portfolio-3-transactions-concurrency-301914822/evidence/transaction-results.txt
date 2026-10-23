@@ -1,0 +1,48 @@
+BEGIN
+SET
+TRUNCATE TABLE
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 2
+INSERT 0 2
+COMMIT
+Portfolio 3 setup result
+ users | authors | administrators | pending_papers | paper_author_rows 
+-------+---------+----------------+----------------+-------------------
+     1 |       1 |              1 |              2 |                 2
+(1 row)
+
+SET
+COMMIT example: begin atomic paper submission
+BEGIN
+INSERT 0 1
+INSERT 0 1
+COMMIT
+COMMIT verification: both related records persist
+ paper_rows | paper_author_rows 
+------------+-------------------
+          1 |                 1
+(1 row)
+
+SET
+ROLLBACK example: begin paper submission
+BEGIN
+INSERT 0 1
+INSERT 0 1
+ROLLBACK verification before rollback: both records are visible inside the transaction
+ paper_rows | paper_author_rows 
+------------+-------------------
+          1 |                 1
+(1 row)
+
+ROLLBACK
+ROLLBACK verification after rollback: neither record remains
+ paper_rows | paper_author_rows 
+------------+-------------------
+          0 |                 0
+(1 row)
+
