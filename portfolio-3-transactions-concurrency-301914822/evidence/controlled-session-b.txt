@@ -1,0 +1,23 @@
+SET
+SET
+Controlled Session B: begin rejection request
+BEGIN
+ transaction_isolation
+-----------------------
+ read committed
+(1 row)
+
+Timing is on.
+Controlled Session B: request the same row lock and wait for Session A
+          document_reference           |  status
+---------------------------------------+-----------
+ portfolio3/controlled-concurrency.pdf | published
+(1 row)
+
+Time: 10296.456 ms (00:10.296)
+Timing is off.
+Controlled Session B: lock acquired; apply only if status is still pending
+INSERT 0 0
+UPDATE 0
+COMMIT
+Controlled Session B: transaction completed without a conflicting decision

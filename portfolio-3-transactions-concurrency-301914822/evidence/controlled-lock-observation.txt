@@ -1,0 +1,6 @@
+SET
+Controlled concurrency lock observation
+         waiting_session         | wait_event_type |  wait_event   |        blocking_session
+---------------------------------+-----------------+---------------+---------------------------------
+ portfolio3-controlled-session-b | Lock            | transactionid | portfolio3-controlled-session-a
+(1 row)

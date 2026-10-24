@@ -1,0 +1,25 @@
+SET
+SET
+Controlled Session A: begin approval request
+BEGIN
+ transaction_isolation
+-----------------------
+ read committed
+(1 row)
+
+Controlled Session A: acquire the paper row lock
+          document_reference           | status
+---------------------------------------+---------
+ portfolio3/controlled-concurrency.pdf | pending
+(1 row)
+
+Controlled Session A: row locked; hold it while Session B attempts access
+ pg_sleep
+----------
+
+(1 row)
+
+INSERT 0 1
+UPDATE 1
+COMMIT
+Controlled Session A: approval committed and row lock released

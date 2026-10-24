@@ -1,0 +1,6 @@
+SET
+Controlled concurrency final state
+          document_reference           | final_status | review_count | rejected_review_count | recorded_decisions
+---------------------------------------+--------------+--------------+-----------------------+--------------------
+ portfolio3/controlled-concurrency.pdf | published    |            1 |                     0 | approved
+(1 row)
