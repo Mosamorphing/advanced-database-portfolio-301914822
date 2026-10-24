@@ -64,11 +64,15 @@ The control mechanism is the combination of the row lock and the status recheck 
 ## Evidence
 
 - [`transaction-results.txt`](./evidence/transaction-results.txt) records the `COMMIT` and `ROLLBACK` results.
+- [`transaction-commit-rollback-results.png`](./evidence/transaction-commit-rollback-results.png) shows the corresponding terminal execution and verification counts.
 - [`uncontrolled-session-a.txt`](./evidence/uncontrolled-session-a.txt) and [`uncontrolled-session-b.txt`](./evidence/uncontrolled-session-b.txt) show that both uncontrolled sessions initially read `pending`.
 - [`uncontrolled-result.txt`](./evidence/uncontrolled-result.txt) records the two conflicting decisions and last-update-wins result.
+- [`uncontrolled-concurrency-conflict.png`](./evidence/uncontrolled-concurrency-conflict.png) shows the concurrent Session B read and the resulting two-decision final state.
 - [`controlled-session-a.txt`](./evidence/controlled-session-a.txt) records the lock holder and its successful approval.
 - [`controlled-session-b.txt`](./evidence/controlled-session-b.txt) records the wait, the refreshed `published` state, `INSERT 0 0`, and `UPDATE 0`.
+- [`controlled-concurrency-result.png`](./evidence/controlled-concurrency-result.png) shows Session A applying one decision while the waiting Session B applies none.
 - [`controlled-lock-observation.txt`](./evidence/controlled-lock-observation.txt) identifies Session B waiting on a transaction lock held by Session A.
+- [`controlled-lock-wait.png`](./evidence/controlled-lock-wait.png) provides screenshot evidence of that blocking relationship.
 - [`controlled-result.txt`](./evidence/controlled-result.txt) records the single approved review in the controlled final state.
 
 ## Reproduction with Docker
