@@ -63,7 +63,7 @@ The analysis will address:
 
 ## Data declaration
 
-All records used in this activity will be generated locally from fixed fictional values. No production or externally sourced dataset will be used. Synthetic email addresses, where required, will use the reserved `example.test` domain.
+The permanent demonstration dataset will be generated locally from fixed fictional values. The model-validation script uses temporary locally generated identifiers, then verifies that its fixtures are removed. No production or externally sourced dataset will be used. Synthetic email addresses, where required, will use the reserved `example.test` domain.
 
 The dataset will be sized to demonstrate the model and queries reproducibly; it will not be presented as evidence of Nubian Research's production volume, workload or performance.
 

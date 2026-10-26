@@ -1,0 +1,37 @@
+Portfolio 4 MongoDB collections and validators created.
+{
+  database: 'nubian_portfolio4',
+  collections: [
+    'comments',
+    'papers'
+  ],
+  customIndexes: [
+    'uq_papers_document_reference',
+    'papers_status_category_submitted_at',
+    'papers_keyword_status',
+    'comments_paper_created_at',
+    'comments_paper_parent_created_at'
+  ]
+}
+Portfolio 4 model validation
+PASS papers $jsonSchema validator configured as strict/error
+PASS comments $jsonSchema validator configured as strict/error
+PASS exact paper indexes configured (3 custom + _id)
+PASS exact comment indexes configured (2 custom + _id)
+PASS valid paper accepted
+PASS invalid paper rejected (code 121)
+PASS valid top-level comment and reply accepted
+PASS invalid comment rejected (code 121)
+PASS duplicate documentReference rejected (code 11000)
+PASS published-category query index usability: IXSCAN papers_status_category_submitted_at
+PASS keyword query index usability: IXSCAN papers_keyword_status
+PASS paper comments query index usability: IXSCAN comments_paper_created_at
+PASS comment replies query index usability: IXSCAN comments_paper_parent_created_at
+PASS temporary validation fixtures removed
+{
+  cleanupVerification: {
+    temporaryPapers: 0,
+    temporaryComments: 0
+  }
+}
+MODEL VALIDATION PASSED

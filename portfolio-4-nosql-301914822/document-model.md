@@ -227,7 +227,7 @@ Document validation cannot provide all the relational guarantees from Portfolio 
 
 The Portfolio 1 schema did not require exactly one corresponding author, so this model does not present that as an inherited rule. Each author item must contain a Boolean `isCorrespondingAuthor` value, while the seeded examples will identify one corresponding author.
 
-The deterministic seed and validation scripts will check the cross-document and date assumptions needed by this assessment. A real application would need to enforce the remaining rules in its write logic. Identifiers for users, authors, institutions, fields, categories and keywords are logical, type-checked values in this deliberately two-collection model; MongoDB does not verify them against separate master collections.
+Later deterministic seed and data-validation scripts will check the cross-document and date assumptions needed by this assessment. A real application would need to enforce the remaining rules in its write logic. Identifiers for users, authors, institutions, fields, categories and keywords are logical, type-checked values in this deliberately two-collection model; MongoDB does not verify them against separate master collections.
 
 ## Suitability and limitations
 
