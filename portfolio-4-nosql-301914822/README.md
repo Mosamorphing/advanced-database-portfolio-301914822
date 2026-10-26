@@ -43,7 +43,7 @@ These operations are assessment scenarios derived from the Portfolio 1 entities.
 
 The practical work will provide:
 
-- A documented paper and comment model with representative JSON documents.
+- A documented paper and comment model with representative BSON documents shown in `mongosh` syntax.
 - MongoDB collection validation using `$jsonSchema`.
 - Deterministic synthetic seed data.
 - Indexes justified by the demonstrated access patterns.
@@ -71,7 +71,7 @@ The dataset will be sized to demonstrate the model and queries reproducibly; it 
 
 The completed portfolio will contain:
 
-- `document-model.md` for the model, example documents and design decisions.
+- [`document-model.md`](./document-model.md) for the model, example documents and design decisions.
 - MongoDB setup, validation, seed and query scripts.
 - Query and aggregation output captured from an actual execution.
 - Screenshot evidence of the implementation.
