@@ -1,0 +1,48 @@
+Portfolio 4 deterministic synthetic seed
+Resetting only papers and comments in the dedicated assessment database.
+Portfolio 4 seed result
+{
+  papers: 6,
+  comments: 7,
+  statusCounts: [
+    {
+      count: 1,
+      status: 'pending'
+    },
+    {
+      count: 4,
+      status: 'published'
+    },
+    {
+      count: 1,
+      status: 'rejected'
+    }
+  ],
+  publishedByField: [
+    {
+      field: 'Computing',
+      count: 2
+    },
+    {
+      field: 'Environmental Science',
+      count: 1
+    },
+    {
+      field: 'Public Health',
+      count: 1
+    }
+  ]
+}
+Portfolio 4 deterministic seed validation
+PASS exact dataset counts: 6 papers, 7 comments
+PASS all fixed identifiers and document references are present
+PASS status distribution: 4 published, 1 pending, 1 rejected
+PASS paper dates, embedded identifier uniqueness, and corresponding-author seed convention
+PASS denormalised field, category, keyword, author, and institution snapshots are initially consistent
+PASS dataset covers 3 fields and 3 categories
+PASS all comments reference published papers and have valid timestamps
+PASS parent references exist, are non-self, and remain within the same paper
+PASS comment distribution: 4 top-level, 3 replies across 3 papers
+PASS category and keyword targets include only the expected published papers
+PASS published aggregation: Computing 2, Environmental Science 1, Public Health 1
+DATA VALIDATION PASSED

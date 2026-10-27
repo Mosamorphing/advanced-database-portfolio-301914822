@@ -82,7 +82,7 @@ The example uses `mongosh` notation so that the BSON `ObjectId` and `Date` value
       authorId: ObjectId("660000000000000000000201"),
       userId: ObjectId("660000000000000000000101"),
       fullName: "Ada Example",
-      orcid: null,
+      orcid: "0000-0000-0000-0000",
       institution: {
         institutionId: ObjectId("660000000000000000000301"),
         name: "Synthetic Research Institute"
@@ -114,6 +114,8 @@ The example uses `mongosh` notation so that the BSON `ObjectId` and `Date` value
 ```
 
 The first item in `authors` is the first credited author and the second item is the second credited author. This uses the ordering already preserved by a BSON array instead of duplicating an `authorOrder` value inside every item.
+
+The example ORCID is a fixed fictional value that satisfies the Portfolio 1 format rule. It is not presented as a registry-assigned or checksum-verified identity.
 
 ## `comments` collection
 
@@ -154,7 +156,7 @@ Comments are stored separately because their number is unpredictable, they are w
   paperId: ObjectId("660000000000000000000001"),
   author: {
     userId: ObjectId("660000000000000000000101"),
-    displayName: "Synthetic Researcher"
+    displayName: "Ada Example"
   },
   parentCommentId: ObjectId("660000000000000000000701"),
   body: "A fictional reply linked to the first comment.",
