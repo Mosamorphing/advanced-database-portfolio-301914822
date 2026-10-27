@@ -62,6 +62,8 @@ The dataset is sized to demonstrate the model and queries reproducibly. It is no
 - [`model-validation.txt`](./evidence/model-validation.txt) records successful collection validation, uniqueness and index-usability checks.
 - [`data-validation.txt`](./evidence/data-validation.txt) records the deterministic seed summary and data-integrity checks.
 - [`query-results.txt`](./evidence/query-results.txt) records the document queries, rejected and accepted updates, comment retrieval, aggregation and post-query restoration check.
+- [`mongodb-model-validation.png`](./evidence/mongodb-model-validation.png) shows the model-validation checks executing successfully in the terminal.
+- [`mongodb-query-data-validation.png`](./evidence/mongodb-query-data-validation.png) shows the query demonstration and post-query data validation executing successfully.
 
 The executed checks produced the following final results:
 
