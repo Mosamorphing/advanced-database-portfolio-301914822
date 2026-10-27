@@ -1,0 +1,236 @@
+Portfolio 4 MongoDB query execution
+
+QUERY 1 - Published paper detail
+{
+  documentReference: 'portfolio4/papers/synthetic-paper-001.pdf',
+  title: 'A Synthetic Study of Open Research Metadata',
+  status: 'published',
+  classification: {
+    field: {
+      fieldId: ObjectId('660000000000000000000401'),
+      name: 'Computing'
+    },
+    category: {
+      categoryId: ObjectId('660000000000000000000501'),
+      name: 'Database Systems'
+    }
+  },
+  authors: [
+    {
+      authorId: ObjectId('660000000000000000000201'),
+      userId: ObjectId('660000000000000000000101'),
+      fullName: 'Ada Example',
+      orcid: '0000-0000-0000-0000',
+      institution: {
+        institutionId: ObjectId('660000000000000000000301'),
+        name: 'Synthetic Research Institute'
+      },
+      isCorrespondingAuthor: true
+    },
+    {
+      authorId: ObjectId('660000000000000000000202'),
+      userId: null,
+      fullName: 'Bola Example',
+      orcid: null,
+      institution: null,
+      isCorrespondingAuthor: false
+    }
+  ],
+  keywords: [
+    {
+      keywordId: ObjectId('660000000000000000000601'),
+      name: 'Open Access'
+    },
+    {
+      keywordId: ObjectId('660000000000000000000602'),
+      name: 'Document Databases'
+    }
+  ]
+}
+PASS: one paper read returned its embedded classification, authors and keywords
+
+QUERY 2A - Published papers by category
+[
+  {
+    title: 'Synthetic Query Planning for Research Discovery',
+    status: 'published',
+    classification: {
+      category: {
+        name: 'Database Systems'
+      }
+    },
+    submittedAt: ISODate('2026-01-18T10:00:00.000Z')
+  },
+  {
+    title: 'A Synthetic Study of Open Research Metadata',
+    status: 'published',
+    classification: {
+      category: {
+        name: 'Database Systems'
+      }
+    },
+    submittedAt: ISODate('2026-01-15T10:00:00.000Z')
+  }
+]
+PASS: category query returned the two expected published papers
+
+QUERY 2B - Published papers by keyword
+[
+  {
+    title: 'A Fictional Open Epidemiology Dataset',
+    status: 'published',
+    keywords: [
+      {
+        keywordId: ObjectId('660000000000000000000601'),
+        name: 'Open Access'
+      },
+      {
+        keywordId: ObjectId('660000000000000000000604'),
+        name: 'Health Data'
+      }
+    ],
+    submittedAt: ISODate('2026-01-20T10:00:00.000Z')
+  },
+  {
+    title: 'Synthetic Query Planning for Research Discovery',
+    status: 'published',
+    keywords: [
+      {
+        keywordId: ObjectId('660000000000000000000601'),
+        name: 'Open Access'
+      },
+      {
+        keywordId: ObjectId('660000000000000000000603'),
+        name: 'Query Optimisation'
+      }
+    ],
+    submittedAt: ISODate('2026-01-18T10:00:00.000Z')
+  },
+  {
+    title: 'A Synthetic Study of Open Research Metadata',
+    status: 'published',
+    keywords: [
+      {
+        keywordId: ObjectId('660000000000000000000601'),
+        name: 'Open Access'
+      },
+      {
+        keywordId: ObjectId('660000000000000000000602'),
+        name: 'Document Databases'
+      }
+    ],
+    submittedAt: ISODate('2026-01-15T10:00:00.000Z')
+  }
+]
+PASS: keyword query returned the three expected published papers
+
+QUERY 3 - Validated single-document update
+PASS: schema validator rejected an unsupported paper status (MongoDB error 121)
+{
+  matchedCount: 1,
+  modifiedCount: 1,
+  updatedPaper: {
+    title: 'Pending Study of Document-Based Repositories',
+    abstract: 'A revised fictional abstract produced by the Portfolio 4 update demonstration.',
+    status: 'pending',
+    updatedAt: ISODate('2026-02-01T10:00:00.000Z')
+  }
+}
+PASS: valid update modified exactly one pending paper
+PASS: update demonstration restored the original seeded document
+
+QUERY 4A - First page of comments for one paper
+{
+  selectedPaperCommentCount: 5,
+  firstCommentPage: [
+    {
+      _id: ObjectId('660000000000000000000701'),
+      author: {
+        userId: ObjectId('660000000000000000000102'),
+        displayName: 'Synthetic Reader'
+      },
+      parentCommentId: null,
+      body: 'A fictional top-level comment for the document-model demonstration.',
+      createdAt: ISODate('2026-01-17T10:00:00.000Z')
+    },
+    {
+      _id: ObjectId('660000000000000000000702'),
+      author: {
+        userId: ObjectId('660000000000000000000101'),
+        displayName: 'Ada Example'
+      },
+      parentCommentId: ObjectId('660000000000000000000701'),
+      body: 'A fictional reply linked to the first comment.',
+      createdAt: ISODate('2026-01-17T11:00:00.000Z')
+    },
+    {
+      _id: ObjectId('660000000000000000000703'),
+      author: {
+        userId: ObjectId('660000000000000000000103'),
+        displayName: 'Chidi Example'
+      },
+      parentCommentId: ObjectId('660000000000000000000701'),
+      body: 'A second fictional reply in the same discussion thread.',
+      createdAt: ISODate('2026-01-17T12:00:00.000Z')
+    }
+  ]
+}
+PASS: first chronological page returned three of five comments
+
+QUERY 4B - Replies to one comment
+[
+  {
+    _id: ObjectId('660000000000000000000702'),
+    author: {
+      userId: ObjectId('660000000000000000000101'),
+      displayName: 'Ada Example'
+    },
+    parentCommentId: ObjectId('660000000000000000000701'),
+    body: 'A fictional reply linked to the first comment.',
+    createdAt: ISODate('2026-01-17T11:00:00.000Z')
+  },
+  {
+    _id: ObjectId('660000000000000000000703'),
+    author: {
+      userId: ObjectId('660000000000000000000103'),
+      displayName: 'Chidi Example'
+    },
+    parentCommentId: ObjectId('660000000000000000000701'),
+    body: 'A second fictional reply in the same discussion thread.',
+    createdAt: ISODate('2026-01-17T12:00:00.000Z')
+  }
+]
+PASS: reply query returned the two expected child comments
+
+QUERY 5 - Published papers by field
+[
+  {
+    publishedPapers: 2,
+    field: 'Computing'
+  },
+  {
+    publishedPapers: 1,
+    field: 'Environmental Science'
+  },
+  {
+    publishedPapers: 1,
+    field: 'Public Health'
+  }
+]
+PASS: aggregation returned the expected published-paper counts
+
+QUERY DEMONSTRATION PASSED
+
+Post-query restoration check
+PASS exact dataset counts: 6 papers, 7 comments
+PASS all fixed identifiers and document references are present
+PASS status distribution: 4 published, 1 pending, 1 rejected
+PASS paper dates, embedded identifier uniqueness, and corresponding-author seed convention
+PASS denormalised field, category, keyword, author, and institution snapshots are initially consistent
+PASS dataset covers 3 fields and 3 categories
+PASS all comments reference published papers and have valid timestamps
+PASS parent references exist, are non-self, and remain within the same paper
+PASS comment distribution: 4 top-level, 3 replies across 3 papers
+PASS category and keyword targets include only the expected published papers
+PASS published aggregation: Computing 2, Environmental Science 1, Public Health 1
+DATA VALIDATION PASSED
