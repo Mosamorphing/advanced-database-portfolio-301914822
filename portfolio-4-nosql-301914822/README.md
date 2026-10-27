@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This activity continues the Nubian Research case study by designing and implementing a document-oriented NoSQL model for research-paper discovery. It examines how data that was normalised across several relational tables in Portfolio 1 can be organised around the access patterns of a document database.
+This activity continues the Nubian Research case study by designing and implementing a document-oriented NoSQL model for research-paper discovery. It examines how selected data that was normalised across several relational tables in Portfolio 1 can instead be organised around document-database access patterns.
 
 The work is an independent academic model built with synthetic data. It does not reproduce Nubian Research's production database, private source code, internal search or ranking logic, moderation procedures, infrastructure, records, or usage figures.
 
@@ -10,69 +10,139 @@ The work is an independent academic model built with synthetic data. It does not
 
 Portfolio 4 requires a NoSQL model based on the same case study, an example using a document, key-value, column or graph model, implementation evidence, and an explanation of suitability.
 
-The four NoSQL families are alternatives rather than four compulsory implementations. This portfolio uses one document-database example and explains both its advantages and limitations.
+The four NoSQL families are alternatives rather than four compulsory implementations. This portfolio uses MongoDB to implement and evaluate one document-database model.
 
 ## Selected model
 
-MongoDB will be used to implement a paper-centred document model.
+The implementation uses two MongoDB collections: `papers` and `comments`.
 
-Each paper document will contain the bounded information commonly retrieved with a paper:
+Each paper document contains the bounded information commonly retrieved with a paper:
 
 - Title, abstract, publication status and submission date.
 - Embedded field and category details.
 - An ordered array of author summaries, including institutional affiliation.
 - An array of keywords.
 
-Comments will be stored as separate documents linked to a paper rather than embedded inside it. A paper can receive an unpredictable number of comments, so embedding the complete discussion would allow the paper document to grow without a clear bound.
+Comments are stored as separate documents linked to a paper. A paper can receive an unpredictable number of comments, so embedding the complete discussion would allow the paper document to grow without a clear bound.
 
-This is a deliberate assessment design, not a representation of Nubian Research's current or planned production architecture.
+The complete model, representative BSON documents and relational-to-document mapping are documented in [`document-model.md`](./document-model.md). This is an assessment design, not a representation of Nubian Research's current or planned production architecture.
 
-## Access patterns
+## Demonstrated access patterns
 
-The implementation will demonstrate operations that suit the selected model:
+The implementation demonstrates:
 
-1. Retrieve a published paper with its authors, classification and keywords in one document read.
-2. Find published papers by category or keyword.
-3. Update a paper document while retaining its validation rules.
-4. Retrieve comments belonging to a selected paper.
-5. Aggregate publication counts by research field.
+1. Retrieving a published paper with its authors, classification and keywords in one document read.
+2. Finding published papers by category and by keyword.
+3. Rejecting an invalid update through collection validation and completing a valid single-document update.
+4. Retrieving a page of comments for a paper and the replies to one comment.
+5. Aggregating published-paper counts by research field.
 
 These operations are assessment scenarios derived from the Portfolio 1 entities. They are not copies of production queries or business rules.
 
-## Implementation plan
+## Implementation
 
-The practical work will provide:
+The MongoDB implementation contains:
 
-- A documented paper and comment model with representative BSON documents shown in `mongosh` syntax.
-- MongoDB collection validation using `$jsonSchema`.
-- Deterministic synthetic seed data.
-- Indexes justified by the demonstrated access patterns.
-- Executable document queries, an update and an aggregation.
-- Captured terminal output and selected screenshots.
-- An explanation of embedding, referencing, denormalisation, suitability and limitations.
+- [`setup.js`](./mongodb/setup.js), which creates the collections, strict `$jsonSchema` validators and five access-pattern-driven indexes.
+- [`validate-model.js`](./mongodb/validate-model.js), which tests valid and invalid documents, uniqueness, index usability and fixture cleanup.
+- [`seed-data.js`](./mongodb/seed-data.js), which resets and inserts a deterministic dataset of six papers and seven comments.
+- [`validate-data.js`](./mongodb/validate-data.js), which checks identifiers, counts, dates, embedded snapshots, comment references and expected query targets.
+- [`queries.js`](./mongodb/queries.js), which executes the declared reads, update and aggregation with exact result assertions.
 
-## Suitability questions
-
-The analysis will address:
-
-- Why author summaries, classification and keywords are embedded in a paper document.
-- Why comments are referenced separately.
-- How the model reduces joins for paper-discovery reads.
-- What duplication and update-consistency trade-offs result from denormalisation.
-- When the relational model from Portfolio 1 remains the stronger choice.
+The update demonstration first proves that the validator rejects the unsupported status `archived`. It then updates one pending paper successfully and restores the complete original document in a `finally` block. A subsequent data-validation run confirms that the demonstration leaves the seeded dataset unchanged.
 
 ## Data declaration
 
-The permanent demonstration dataset will be generated locally from fixed fictional values. The model-validation script uses temporary locally generated identifiers, then verifies that its fixtures are removed. No production or externally sourced dataset will be used. Synthetic email addresses, where required, will use the reserved `example.test` domain.
+The permanent demonstration dataset is generated locally from fixed fictional values. The model-validation script uses temporary locally generated identifiers and verifies that its fixtures are removed. No production or externally sourced dataset is used.
 
-The dataset will be sized to demonstrate the model and queries reproducibly; it will not be presented as evidence of Nubian Research's production volume, workload or performance.
+The dataset is sized to demonstrate the model and queries reproducibly. It is not evidence of Nubian Research's production volume, workload or performance.
 
-## Planned evidence
+## Results and evidence
 
-The completed portfolio will contain:
+- [`model-validation.txt`](./evidence/model-validation.txt) records successful collection validation, uniqueness and index-usability checks.
+- [`data-validation.txt`](./evidence/data-validation.txt) records the deterministic seed summary and data-integrity checks.
+- [`query-results.txt`](./evidence/query-results.txt) records the document queries, rejected and accepted updates, comment retrieval, aggregation and post-query restoration check.
 
-- [`document-model.md`](./document-model.md) for the model, example documents and design decisions.
-- MongoDB setup, validation, seed and query scripts.
-- Query and aggregation output captured from an actual execution.
-- Screenshot evidence of the implementation.
-- A final suitability and limitations analysis.
+The executed checks produced the following final results:
+
+```text
+MODEL VALIDATION PASSED
+DATA VALIDATION PASSED
+QUERY DEMONSTRATION PASSED
+DATA VALIDATION PASSED
+```
+
+The second data-validation result was produced after the query demonstration and confirms that the temporary update was fully restored.
+
+## Suitability and limitations
+
+The document model suits the demonstrated paper-discovery reads because a paper's classification, ordered authors and keywords can be returned together without reconstructing them through joins. BSON documents also represent nested classification objects and ordered author arrays naturally.
+
+This benefit introduces duplication. Author, institution, category and keyword names are stored as snapshots in multiple paper documents, so changes to shared reference data may require several updates and may temporarily produce inconsistent copies. MongoDB's document validator also does not enforce the cross-document references between comments, papers and parent comments as relational foreign keys would.
+
+The Portfolio 1 relational model remains the stronger choice for workflows requiring normalised shared data, enforced referential integrity and multi-entity transactions. The MongoDB model is therefore suitable for the selected read-oriented access patterns, not a claim that it should replace the relational database or that MongoDB is inherently more scalable.
+
+Further reasoning about embedding, referencing, consistency boundaries and the 16 MiB document-size limit is provided in [`document-model.md`](./document-model.md).
+
+## Reproduction with Docker
+
+Run the following commands from the repository root. Docker must be installed and running.
+
+### Start MongoDB 8.0
+
+```bash
+docker run --rm \
+  --name nubian-portfolio4-mongodb \
+  -d mongo:8.0
+
+docker exec nubian-portfolio4-mongodb \
+  mongosh --quiet --eval "db.runCommand({ ping: 1 })"
+```
+
+Continue after the ping result contains `ok: 1`. If MongoDB is still starting, wait briefly and rerun the ping command.
+
+### Copy the scripts
+
+```bash
+docker exec nubian-portfolio4-mongodb \
+  mkdir -p /tmp/portfolio4
+
+docker cp portfolio-4-nosql-301914822/mongodb/. \
+  nubian-portfolio4-mongodb:/tmp/portfolio4/
+```
+
+### Create and validate the model
+
+```bash
+docker exec nubian-portfolio4-mongodb \
+  mongosh --quiet --file /tmp/portfolio4/setup.js
+
+docker exec nubian-portfolio4-mongodb \
+  mongosh --quiet --file /tmp/portfolio4/validate-model.js
+```
+
+### Seed and validate the dataset
+
+```bash
+docker exec nubian-portfolio4-mongodb \
+  mongosh --quiet --file /tmp/portfolio4/seed-data.js
+
+docker exec nubian-portfolio4-mongodb \
+  mongosh --quiet --file /tmp/portfolio4/validate-data.js
+```
+
+### Run the query demonstration
+
+```bash
+docker exec nubian-portfolio4-mongodb \
+  mongosh --quiet --file /tmp/portfolio4/queries.js
+
+docker exec nubian-portfolio4-mongodb \
+  mongosh --quiet --file /tmp/portfolio4/validate-data.js
+```
+
+The final command verifies that `queries.js` restored the original deterministic dataset. Stop the temporary database after reviewing the output:
+
+```bash
+docker stop nubian-portfolio4-mongodb
+```
