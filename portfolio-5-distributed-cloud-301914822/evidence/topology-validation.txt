@@ -1,0 +1,83 @@
+Portfolio 5 replica-set initialisation - fresh run
+Replica-set configuration accepted.
+{
+  mongoVersion: '8.0.34',
+  replicaSet: 'nubian-rs',
+  initiatedThisRun: true,
+  votingMembers: 3,
+  majorityVotesRequired: 2,
+  members: [
+    {
+      name: 'mongo1:27017',
+      state: 'PRIMARY',
+      health: 1
+    },
+    {
+      name: 'mongo2:27017',
+      state: 'SECONDARY',
+      health: 1
+    },
+    {
+      name: 'mongo3:27017',
+      state: 'SECONDARY',
+      health: 1
+    }
+  ]
+}
+REPLICA SET INITIALISATION PASSED
+
+Portfolio 5 replica-set initialisation - repeat run
+Replica set already configured; validating existing topology.
+{
+  mongoVersion: '8.0.34',
+  replicaSet: 'nubian-rs',
+  initiatedThisRun: false,
+  votingMembers: 3,
+  majorityVotesRequired: 2,
+  members: [
+    {
+      name: 'mongo1:27017',
+      state: 'PRIMARY',
+      health: 1
+    },
+    {
+      name: 'mongo2:27017',
+      state: 'SECONDARY',
+      health: 1
+    },
+    {
+      name: 'mongo3:27017',
+      state: 'SECONDARY',
+      health: 1
+    }
+  ]
+}
+REPLICA SET INITIALISATION PASSED
+
+Portfolio 5 topology validation
+PASS exact three-member replica-set configuration
+PASS three data-bearing voters with majority of two
+PASS one healthy primary and two healthy secondaries
+{
+  replicaSet: 'nubian-rs',
+  votingMembers: 3,
+  majorityVotesRequired: 2,
+  members: [
+    {
+      name: 'mongo1:27017',
+      state: 'PRIMARY',
+      health: 1
+    },
+    {
+      name: 'mongo2:27017',
+      state: 'SECONDARY',
+      health: 1
+    },
+    {
+      name: 'mongo3:27017',
+      state: 'SECONDARY',
+      health: 1
+    }
+  ]
+}
+TOPOLOGY VALIDATION PASSED

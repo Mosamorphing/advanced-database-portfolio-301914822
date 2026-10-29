@@ -57,16 +57,18 @@ Replication copies the same dataset between members to support redundancy and fa
 
 This exercise has no measured dataset size, throughput requirement or justified shard key that would support a sharded design. Adding a sharded cluster would therefore increase operational complexity without answering the selected availability and consistency questions.
 
-## Planned implementation
+## Implementation progress
 
-The completed exercise will contain:
+The deployment tranche provides:
 
-- A Docker Compose deployment with three MongoDB members and persistent local volumes.
-- Replica-set initialisation and bounded readiness checks.
-- Fixed synthetic paper records and majority-acknowledged writes.
-- Replication, election, post-failover write and rejoin validation.
-- Captured command output and selected terminal screenshots.
-- A final explanation of availability, consistency, sharding and cloud-deployment limitations.
+- [`docker-compose.yml`](./docker-compose.yml), containing three MongoDB 8.0 members, separate persistent volumes and a private internal network with no published database ports.
+- [`initialise-replica-set.js`](./mongodb/initialise-replica-set.js), which creates the exact replica-set configuration or safely validates it when rerun.
+- [`validate-topology.js`](./mongodb/validate-topology.js), which verifies three data-bearing voters, a majority of two, one primary and two secondaries.
+- [`topology-validation.txt`](./evidence/topology-validation.txt), containing the successful fresh, repeated and read-only validation output.
+
+Each member limits its WiredTiger internal cache to `0.256` GB because three database processes share one laptop. This is a resource bound for the local exercise, not a production capacity recommendation.
+
+The remaining implementation will add fixed synthetic paper records, majority-acknowledged writes, replication validation, primary failover, a post-failover write, member rejoin evidence and selected screenshots.
 
 ## Planned evidence
 
@@ -78,6 +80,56 @@ The evidence will show:
 - A successful majority write while two members remain available.
 - The restarted member receiving the post-failover record.
 - Final member health and data counts.
+
+## Reproduction: deployment and topology
+
+Run the following commands from the repository root. Docker must be installed and running.
+
+Start all three members and wait until their MongoDB processes respond:
+
+```bash
+docker compose \
+  -f portfolio-5-distributed-cloud-301914822/docker-compose.yml \
+  up -d --wait --wait-timeout 90
+```
+
+Initialise the replica set from `mongo1`. The script discovers the elected roles and is safe to rerun:
+
+```bash
+docker compose \
+  -f portfolio-5-distributed-cloud-301914822/docker-compose.yml \
+  exec -T mongo1 \
+  mongosh --quiet \
+  --file /portfolio5/mongodb/initialise-replica-set.js
+```
+
+Run the independent topology check:
+
+```bash
+docker compose \
+  -f portfolio-5-distributed-cloud-301914822/docker-compose.yml \
+  exec -T mongo1 \
+  mongosh --quiet \
+  --file /portfolio5/mongodb/validate-topology.js
+```
+
+Pause the exercise without deleting its named volumes:
+
+```bash
+docker compose \
+  -f portfolio-5-distributed-cloud-301914822/docker-compose.yml \
+  stop
+```
+
+Rerunning the earlier `up -d --wait --wait-timeout 90` command resumes the preserved deployment.
+
+Full cleanup deliberately deletes the three local assessment volumes and should be used only after all Portfolio 5 evidence has been captured:
+
+```bash
+docker compose \
+  -f portfolio-5-distributed-cloud-301914822/docker-compose.yml \
+  down --volumes
+```
 
 ## Data and security declaration
 

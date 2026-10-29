@@ -1,0 +1,93 @@
+services:
+  mongo1:
+    image: mongo:8.0
+    hostname: mongo1
+    command:
+      - mongod
+      - --replSet
+      - nubian-rs
+      - --bind_ip_all
+      - --wiredTigerCacheSizeGB
+      - "0.256"
+    volumes:
+      - mongo1-data:/data/db
+      - ./mongodb:/portfolio5/mongodb:ro
+    networks:
+      - replica-network
+    healthcheck:
+      test:
+        - CMD
+        - mongosh
+        - --quiet
+        - --eval
+        - "quit(db.adminCommand({ ping: 1 }).ok ? 0 : 2)"
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 5s
+    stop_grace_period: 30s
+
+  mongo2:
+    image: mongo:8.0
+    hostname: mongo2
+    command:
+      - mongod
+      - --replSet
+      - nubian-rs
+      - --bind_ip_all
+      - --wiredTigerCacheSizeGB
+      - "0.256"
+    volumes:
+      - mongo2-data:/data/db
+      - ./mongodb:/portfolio5/mongodb:ro
+    networks:
+      - replica-network
+    healthcheck:
+      test:
+        - CMD
+        - mongosh
+        - --quiet
+        - --eval
+        - "quit(db.adminCommand({ ping: 1 }).ok ? 0 : 2)"
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 5s
+    stop_grace_period: 30s
+
+  mongo3:
+    image: mongo:8.0
+    hostname: mongo3
+    command:
+      - mongod
+      - --replSet
+      - nubian-rs
+      - --bind_ip_all
+      - --wiredTigerCacheSizeGB
+      - "0.256"
+    volumes:
+      - mongo3-data:/data/db
+      - ./mongodb:/portfolio5/mongodb:ro
+    networks:
+      - replica-network
+    healthcheck:
+      test:
+        - CMD
+        - mongosh
+        - --quiet
+        - --eval
+        - "quit(db.adminCommand({ ping: 1 }).ok ? 0 : 2)"
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 5s
+    stop_grace_period: 30s
+
+networks:
+  replica-network:
+    internal: true
+
+volumes:
+  mongo1-data:
+  mongo2-data:
+  mongo3-data:

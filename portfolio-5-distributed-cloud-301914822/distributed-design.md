@@ -25,6 +25,8 @@ client*─┼─ mongo2:27017  ─┼─ replica set nubian-rs│
 
 Each container is a voting, data-bearing member with its own persistent volume. No arbiter is needed because all three members store data and collectively provide an odd number of votes.
 
+Because three `mongod` processes share one laptop, each member limits its WiredTiger internal cache to `0.256` GB. This prevents the local exercise from treating host memory as though each container were the only database process; it is not a production sizing recommendation.
+
 The internal client connection string will list all three Docker hostnames and the replica-set name. That allows the MongoDB client to discover the current primary after an election instead of sending writes to one permanently fixed hostname.
 
 ## Member roles and majority
@@ -131,3 +133,4 @@ The practical exercise succeeds only if the captured evidence confirms all of th
 - [MongoDB: Replica Set Deployment Architectures](https://www.mongodb.com/docs/manual/core/replica-set-architectures/)
 - [MongoDB: Write Concern](https://www.mongodb.com/docs/manual/reference/write-concern/)
 - [MongoDB: Read Concern `"majority"`](https://www.mongodb.com/docs/manual/reference/read-concern-majority/)
+- [MongoDB: WiredTiger cache configuration](https://www.mongodb.com/docs/manual/reference/configuration-options/#mongodb-setting-storage.wiredTiger.engineConfig.cacheSizeGB)
