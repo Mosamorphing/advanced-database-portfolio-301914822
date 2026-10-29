@@ -10,11 +10,11 @@ The work is an independent academic deployment. It does not reproduce Nubian Res
 
 Portfolio 5 requires a distributed or cloud database discussion or setup based on the same case study, with evidence relating to concepts such as replication, sharding, availability, consistency or deployment.
 
-This portfolio will provide a working local distributed setup and evidence for deployment, replication, consistency, failover and recovery. Sharding is evaluated but deliberately not implemented.
+This portfolio provides a working local distributed setup and evidence for deployment, replication, consistency, failover and recovery. Sharding is evaluated but deliberately not implemented.
 
 ## Selected exercise
 
-MongoDB 8.0 will run as a replica set named `nubian-rs` across three Docker containers:
+MongoDB 8.0 runs as a replica set named `nubian-rs` across three Docker containers:
 
 ```text
 mongo1 ─┐
@@ -22,13 +22,13 @@ mongo2 ─┼── replica set: nubian-rs
 mongo3 ─┘
 ```
 
-All three members will store the same synthetic data. At a given time, one member will accept writes as the primary and the other two will replicate those writes as secondaries. The members will have equal voting priority, so the implementation will discover elected roles rather than assume that a particular container must always be primary.
+All three members store the same synthetic data. At a given time, one member accepts writes as the primary and the other two replicate those writes as secondaries. The members have equal voting priority, so the implementation discovers elected roles rather than assuming that a particular container must always be primary.
 
 The detailed topology and consistency decisions are documented in [`distributed-design.md`](./distributed-design.md).
 
-## Planned demonstrations
+## Executed demonstrations
 
-The implementation will demonstrate:
+The implementation demonstrates:
 
 1. Deploying and initialising three data-bearing replica-set members.
 2. Writing a synthetic paper with majority write concern.
@@ -37,19 +37,19 @@ The implementation will demonstrate:
 5. Completing another majority-acknowledged write with one member unavailable.
 6. Restarting the stopped member and verifying that it rejoins and catches up.
 
-The failover target will be discovered dynamically. The exercise will not hard-code which remaining member wins the election.
+The failover target is discovered dynamically. The exercise does not hard-code which remaining member wins the election.
 
 ## Consistency and availability scope
 
 A three-member replica set has a voting majority of two. It can therefore continue accepting writes after one member fails, following a brief election interval. If two members are unavailable, the remaining member cannot form a majority or elect itself primary, so majority writes stop rather than allowing two independent writable histories.
 
-Demonstration writes will request:
+Demonstration writes request:
 
 ```javascript
 { w: "majority", j: true, wtimeout: 10000 }
 ```
 
-Validation reads from secondary members will use secondary read preference together with majority read concern. Replication is asynchronous, so the validation will use bounded readiness checks instead of claiming that every secondary is updated instantaneously.
+Validation reads from secondary members use secondary read preference together with majority read concern. Replication is asynchronous, so the validation uses bounded readiness checks instead of claiming that every secondary is updated instantaneously.
 
 ## Sharding decision
 
@@ -57,7 +57,7 @@ Replication copies the same dataset between members to support redundancy and fa
 
 This exercise has no measured dataset size, throughput requirement or justified shard key that would support a sharded design. Adding a sharded cluster would therefore increase operational complexity without answering the selected availability and consistency questions.
 
-## Implementation progress
+## Implementation and evidence
 
 The deployment tranche provides:
 
@@ -66,23 +66,27 @@ The deployment tranche provides:
 - [`validate-topology.js`](./mongodb/validate-topology.js), which verifies three data-bearing voters, a majority of two, one primary and two secondaries.
 - [`topology-validation.txt`](./evidence/topology-validation.txt), containing the successful fresh, repeated and read-only validation output.
 - [`seed-majority-write.js`](./mongodb/seed-majority-write.js), which resets the dedicated assessment collection and inserts one fixed paper using majority write concern and journalling.
-- [`validate-replication.js`](./mongodb/validate-replication.js), which uses bounded direct-member reads to compare the same majority-committed paper on all three members.
+- [`validate-replication.js`](./mongodb/validate-replication.js), which uses bounded direct-member reads to confirm the exact baseline dataset on all three members before failure.
 - [`replication-validation.txt`](./evidence/replication-validation.txt), containing the successful majority-write and three-member replication results.
+- [`run-failover-demo.sh`](./scripts/run-failover-demo.sh), which discovers and stops the current primary, waits for a replacement, performs a majority write, restarts the stopped member and invokes final validation.
+- [`write-after-failover.js`](./mongodb/write-after-failover.js), which verifies the baseline record and performs the second majority-journalled write while one member is unavailable.
+- [`validate-after-failover.js`](./mongodb/validate-after-failover.js), which waits within a fixed deadline for one primary, two secondaries and identical two-paper snapshots on all three members.
+- [`failover-validation.txt`](./evidence/failover-validation.txt), containing the executed election, write, rejoin and catch-up results.
 
 Each member limits its WiredTiger internal cache to `0.256` GB because three database processes share one laptop. This is a resource bound for the local exercise, not a production capacity recommendation.
 
-The remaining implementation will add primary failover, a post-failover majority write, member rejoin evidence and selected screenshots.
+The scripted implementation and text evidence are complete. Selected screenshots can be added to the final portfolio document without changing the test itself.
 
-## Planned evidence
+## Evidence captured
 
-The evidence will show:
+The evidence shows:
 
 - The three replica-set members and their elected roles.
 - The same baseline document identifiers on all three members.
 - A primary becoming unavailable and another member being elected.
 - A successful majority write while two members remain available.
 - The restarted member receiving the post-failover record.
-- Final member health and data counts.
+- Final member roles and identical two-record snapshots.
 
 ## Reproduction: deployment and topology
 
@@ -142,6 +146,18 @@ docker compose \
 ```
 
 The validator uses secondary read preference, majority read concern and bounded per-member timeouts. Matching snapshots prove that each specific member applied the baseline document; majority write acknowledgement alone would establish only the required majority.
+
+### Run the failover and recovery demonstration
+
+Run the complete deterministic sequence:
+
+```bash
+portfolio-5-distributed-cloud-301914822/scripts/run-failover-demo.sh
+```
+
+The script first restores the one-paper baseline while all members are online, verifies that no stale post-failover record remains, and then discovers the current primary. It stops that member without deleting its volume, waits up to 60 seconds for a different primary, performs the second majority write, restarts the stopped member and verifies its catch-up. An exit trap attempts to restart the stopped member if the sequence is interrupted.
+
+The command is safe to rerun against this assessment deployment. A repeat run successfully handled a different starting primary, confirming that member roles are discovered rather than fixed in the script.
 
 Pause the exercise without deleting its named volumes:
 

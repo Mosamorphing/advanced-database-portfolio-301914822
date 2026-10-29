@@ -29,11 +29,11 @@
     };
   });
 
-  const readExpectedPaper = (member) => {
+  const readExpectedDataset = (member) => {
     const hello = member.adminDb.runCommand({ hello: 1 });
     const result = member.portfolioDb.runCommand({
       find: collectionName,
-      filter: { _id: expectedPaperId },
+      filter: { assessmentScope: "portfolio5" },
       projection: {
         _id: 1,
         assessmentScope: 1,
@@ -44,7 +44,8 @@
         createdAt: 1,
         updatedAt: 1
       },
-      limit: 1,
+      sort: { _id: 1 },
+      limit: 3,
       singleBatch: true,
       maxTimeMS: 2000,
       readConcern: { level: "majority" },
@@ -58,7 +59,7 @@
         : hello.secondary
           ? "SECONDARY"
           : "OTHER",
-      paper: result.cursor.firstBatch[0] ?? null
+      papers: result.cursor.firstBatch
     };
   };
 
@@ -72,20 +73,27 @@
       try {
         return {
           host: member.host,
-          ...readExpectedPaper(member),
+          ...readExpectedDataset(member),
           error: null
         };
       } catch (error) {
         return {
           host: member.host,
           role: "UNKNOWN",
-          paper: null,
+          papers: [],
           error: error.message
         };
       }
     });
 
-    if (observations.every((observation) => observation.paper !== null)) {
+    if (
+      observations.every(
+        (observation) =>
+          observation.papers.length === 1 &&
+          observation.papers[0]._id.equals(expectedPaperId) &&
+          observation.papers[0].replicationStage === "baseline"
+      )
+    ) {
       break;
     }
 
@@ -94,8 +102,13 @@
 
   try {
     assertCondition(
-      observations.every((observation) => observation.paper !== null),
-      `baseline paper did not reach every member within ${timeoutMs} ms: ${EJSON.stringify(observations)}`
+      observations.every(
+        (observation) =>
+          observation.papers.length === 1 &&
+          observation.papers[0]._id.equals(expectedPaperId) &&
+          observation.papers[0].replicationStage === "baseline"
+      ),
+      `exact baseline dataset did not reach every member within ${timeoutMs} ms: ${EJSON.stringify(observations)}`
     );
 
     const primaryCount = observations.filter(
@@ -110,14 +123,15 @@
     );
 
     const snapshots = observations.map((observation) =>
-      EJSON.stringify(observation.paper, { relaxed: false })
+      EJSON.stringify(observation.papers, { relaxed: false })
     );
     assertCondition(
       new Set(snapshots).size === 1,
-      "replica-set members returned different baseline paper snapshots"
+      "replica-set members returned different baseline dataset snapshots"
     );
 
-    print("PASS majority-acknowledged baseline paper present on all three members");
+    print("PASS exact one-paper baseline dataset present on all three members");
+    print("PASS no stale post-failover paper remains before the failure test");
     print("PASS one primary and two secondaries observed through direct member checks");
     print("PASS identical baseline paper snapshot returned by every member");
     printjson({
@@ -126,8 +140,8 @@
       members: observations.map((observation) => ({
         host: observation.host,
         role: observation.role,
-        paperId: observation.paper._id,
-        replicationStage: observation.paper.replicationStage
+        paperId: observation.papers[0]._id,
+        replicationStage: observation.papers[0].replicationStage
       }))
     });
     print("REPLICATION VALIDATION PASSED");

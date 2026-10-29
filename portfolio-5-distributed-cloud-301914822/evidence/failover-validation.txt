@@ -1,0 +1,173 @@
+Portfolio 5 failover demonstration
+Portfolio 5 topology validation
+PASS exact three-member replica-set configuration
+PASS three data-bearing voters with majority of two
+PASS one healthy primary and two healthy secondaries
+{
+  replicaSet: 'nubian-rs',
+  votingMembers: 3,
+  majorityVotesRequired: 2,
+  members: [
+    {
+      name: 'mongo1:27017',
+      state: 'SECONDARY',
+      health: 1
+    },
+    {
+      name: 'mongo2:27017',
+      state: 'PRIMARY',
+      health: 1
+    },
+    {
+      name: 'mongo3:27017',
+      state: 'SECONDARY',
+      health: 1
+    }
+  ]
+}
+TOPOLOGY VALIDATION PASSED
+Portfolio 5 majority-write seed
+PASS deterministic assessment dataset reset with majority acknowledgement
+PASS baseline paper inserted with majority acknowledgement and journalling
+PASS baseline paper returned by a majority read
+{
+  primary: 'mongo2:27017',
+  writeConcern: {
+    w: 'majority',
+    j: true,
+    wtimeout: 10000
+  },
+  deletedDocuments: 2,
+  insertedDocument: {
+    _id: ObjectId('680000000000000000000001'),
+    documentReference: 'portfolio5/papers/replicated-paper-001.pdf',
+    title: 'Synthetic Replicated Research Paper',
+    status: 'published',
+    replicationStage: 'baseline'
+  }
+}
+MAJORITY-WRITE SEED PASSED
+Portfolio 5 replication validation
+PASS exact one-paper baseline dataset present on all three members
+PASS no stale post-failover paper remains before the failure test
+PASS one primary and two secondaries observed through direct member checks
+PASS identical baseline paper snapshot returned by every member
+{
+  readConcern: 'majority',
+  readPreference: 'secondaryPreferred',
+  members: [
+    {
+      host: 'mongo1:27017',
+      role: 'SECONDARY',
+      paperId: ObjectId('680000000000000000000001'),
+      replicationStage: 'baseline'
+    },
+    {
+      host: 'mongo2:27017',
+      role: 'PRIMARY',
+      paperId: ObjectId('680000000000000000000001'),
+      replicationStage: 'baseline'
+    },
+    {
+      host: 'mongo3:27017',
+      role: 'SECONDARY',
+      paperId: ObjectId('680000000000000000000001'),
+      replicationStage: 'baseline'
+    }
+  ]
+}
+REPLICATION VALIDATION PASSED
+Initial primary: mongo2
+PASS primary rechecked immediately before stop: mongo2
+Stopping current primary without deleting its volume: mongo2
+ Container portfolio-5-distributed-cloud-301914822-mongo2-1  Stopping
+ Container portfolio-5-distributed-cloud-301914822-mongo2-1  Stopped
+PASS replacement primary elected: mongo1
+Portfolio 5 post-failover majority write
+PASS baseline majority-committed paper retained after primary election
+PASS post-failover paper inserted with majority acknowledgement and journalling
+PASS both expected papers returned by a majority read
+{
+  electedPrimary: 'mongo1:27017',
+  writeConcern: {
+    w: 'majority',
+    j: true,
+    wtimeout: 10000
+  },
+  removedPreviousPostFailoverDocuments: 0,
+  papers: [
+    {
+      _id: ObjectId('680000000000000000000001'),
+      title: 'Synthetic Replicated Research Paper',
+      status: 'published',
+      replicationStage: 'baseline'
+    },
+    {
+      _id: ObjectId('680000000000000000000002'),
+      title: 'Synthetic Paper Written After Primary Election',
+      status: 'published',
+      replicationStage: 'post-failover'
+    }
+  ]
+}
+POST-FAILOVER MAJORITY WRITE PASSED
+Restarting former primary: mongo2
+ Container portfolio-5-distributed-cloud-301914822-mongo2-1  Starting
+ Container portfolio-5-distributed-cloud-301914822-mongo2-1  Started
+ Container portfolio-5-distributed-cloud-301914822-mongo2-1  Waiting
+ Container portfolio-5-distributed-cloud-301914822-mongo2-1  Healthy
+Portfolio 5 post-failover and rejoin validation
+PASS one primary and two secondaries healthy after member restart
+PASS baseline and post-failover papers present on all three members
+PASS identical two-paper snapshot returned by every member
+{
+  readConcern: 'majority',
+  readPreference: 'secondaryPreferred',
+  members: [
+    {
+      host: 'mongo1:27017',
+      role: 'PRIMARY',
+      papers: [
+        {
+          paperId: ObjectId('680000000000000000000001'),
+          replicationStage: 'baseline'
+        },
+        {
+          paperId: ObjectId('680000000000000000000002'),
+          replicationStage: 'post-failover'
+        }
+      ]
+    },
+    {
+      host: 'mongo2:27017',
+      role: 'SECONDARY',
+      papers: [
+        {
+          paperId: ObjectId('680000000000000000000001'),
+          replicationStage: 'baseline'
+        },
+        {
+          paperId: ObjectId('680000000000000000000002'),
+          replicationStage: 'post-failover'
+        }
+      ]
+    },
+    {
+      host: 'mongo3:27017',
+      role: 'SECONDARY',
+      papers: [
+        {
+          paperId: ObjectId('680000000000000000000001'),
+          replicationStage: 'baseline'
+        },
+        {
+          paperId: ObjectId('680000000000000000000002'),
+          replicationStage: 'post-failover'
+        }
+      ]
+    }
+  ]
+}
+POST-FAILOVER REJOIN VALIDATION PASSED
+PASS restarted member rejoined with both expected papers: mongo2
+FAILOVER DEMONSTRATION PASSED

@@ -41,11 +41,11 @@ With three voting members, two votes form a majority:
 | Two | Writable after election | The remaining two members can form a majority. |
 | One | Not writable as a replica set | One member cannot form a majority or elect a primary. |
 
-The exercise will stop only one member. The two-member-loss case will be explained rather than introduced into the practical run.
+The exercise stops only one member. The two-member-loss case is explained rather than introduced into the practical run.
 
 ## Write consistency
 
-Both demonstration inserts will request majority acknowledgement, journalling and a bounded acknowledgement timeout:
+Both demonstration inserts request majority acknowledgement, journalling and a bounded acknowledgement timeout:
 
 ```javascript
 {
@@ -59,13 +59,13 @@ Both demonstration inserts will request majority acknowledgement, journalling an
 
 The write is treated as successfully acknowledged only after the required majority has confirmed it. This makes the test meaningful when the current primary is stopped: an acknowledged write should be present on the majority from which a replacement primary can be elected.
 
-The timeout prevents the demonstration from waiting indefinitely if a majority cannot be reached. A timeout is evidence that acknowledgement was not obtained; it is not by itself proof that the database never applied the write, so validation will check the resulting records explicitly.
+The timeout prevents the demonstration from waiting indefinitely if a majority cannot be reached. A timeout is evidence that acknowledgement was not obtained; it is not by itself proof that the database never applied the write, so validation checks the resulting records explicitly.
 
 ## Read consistency
 
-Replication to secondary members is asynchronous and may lag behind the primary. Direct secondary validation will therefore select a secondary through read preference, request majority read concern and use bounded polling for the expected fixed identifiers.
+Replication to secondary members is asynchronous and may lag behind the primary. Direct secondary validation therefore selects a secondary through read preference, requests majority read concern and uses bounded polling for the expected fixed identifiers.
 
-The implementation will not claim that a secondary read is instantly current. It will distinguish:
+The implementation does not claim that a secondary read is instantly current. It distinguishes:
 
 - replication eventually delivering an operation to each healthy member;
 - majority acknowledgement confirming that the required voting majority accepted a write; and
@@ -73,7 +73,7 @@ The implementation will not claim that a secondary read is instantly current. It
 
 ## Availability and failover sequence
 
-The failover demonstration will follow this sequence:
+The failover demonstration follows this sequence:
 
 1. Start all three containers and initialise `nubian-rs`.
 2. Wait until one primary and two secondaries are healthy.
@@ -86,7 +86,7 @@ The failover demonstration will follow this sequence:
 9. Restart the stopped member.
 10. Wait until it rejoins and verify that it contains both paper identifiers.
 
-The election causes a temporary interruption rather than zero downtime. The evidence will record member roles and data state before and after the interruption; it will not infer production recovery time from a local laptop run.
+The election causes a temporary interruption rather than zero downtime. The evidence records member roles and data state before and after the interruption; it does not infer production recovery time from a local laptop run.
 
 ## Partition and consistency behaviour
 
@@ -126,6 +126,12 @@ The practical exercise succeeds only if the captured evidence confirms all of th
 - the post-failover majority write acknowledged while two members are available;
 - the restarted member rejoining and containing both expected records; and
 - no real Nubian Research data, credentials or infrastructure details in the implementation or evidence.
+
+## Executed result
+
+The complete workflow passed twice. In the recorded repeat run, `mongo2` began as primary, the script stopped it without deleting its volume, and `mongo1` was elected as the replacement. The second paper was acknowledged with majority write concern while only `mongo1` and `mongo3` were available. After `mongo2` restarted, direct bounded checks reported one primary, two secondaries and the same two-paper snapshot on every member.
+
+These results satisfy the database-member failure criteria only. They do not establish physical-host or cloud-region resilience because all containers ran on one laptop.
 
 ## References
 
