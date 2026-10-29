@@ -1,0 +1,51 @@
+Portfolio 5 majority-write seed
+PASS deterministic assessment dataset reset with majority acknowledgement
+PASS baseline paper inserted with majority acknowledgement and journalling
+PASS baseline paper returned by a majority read
+{
+  primary: 'mongo1:27017',
+  writeConcern: {
+    w: 'majority',
+    j: true,
+    wtimeout: 10000
+  },
+  deletedDocuments: 1,
+  insertedDocument: {
+    _id: ObjectId('680000000000000000000001'),
+    documentReference: 'portfolio5/papers/replicated-paper-001.pdf',
+    title: 'Synthetic Replicated Research Paper',
+    status: 'published',
+    replicationStage: 'baseline'
+  }
+}
+MAJORITY-WRITE SEED PASSED
+
+Portfolio 5 replication validation
+PASS majority-acknowledged baseline paper present on all three members
+PASS one primary and two secondaries observed through direct member checks
+PASS identical baseline paper snapshot returned by every member
+{
+  readConcern: 'majority',
+  readPreference: 'secondaryPreferred',
+  members: [
+    {
+      host: 'mongo1:27017',
+      role: 'PRIMARY',
+      paperId: ObjectId('680000000000000000000001'),
+      replicationStage: 'baseline'
+    },
+    {
+      host: 'mongo2:27017',
+      role: 'SECONDARY',
+      paperId: ObjectId('680000000000000000000001'),
+      replicationStage: 'baseline'
+    },
+    {
+      host: 'mongo3:27017',
+      role: 'SECONDARY',
+      paperId: ObjectId('680000000000000000000001'),
+      replicationStage: 'baseline'
+    }
+  ]
+}
+REPLICATION VALIDATION PASSED

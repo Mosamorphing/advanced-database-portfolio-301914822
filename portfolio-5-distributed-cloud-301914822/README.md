@@ -65,10 +65,13 @@ The deployment tranche provides:
 - [`initialise-replica-set.js`](./mongodb/initialise-replica-set.js), which creates the exact replica-set configuration or safely validates it when rerun.
 - [`validate-topology.js`](./mongodb/validate-topology.js), which verifies three data-bearing voters, a majority of two, one primary and two secondaries.
 - [`topology-validation.txt`](./evidence/topology-validation.txt), containing the successful fresh, repeated and read-only validation output.
+- [`seed-majority-write.js`](./mongodb/seed-majority-write.js), which resets the dedicated assessment collection and inserts one fixed paper using majority write concern and journalling.
+- [`validate-replication.js`](./mongodb/validate-replication.js), which uses bounded direct-member reads to compare the same majority-committed paper on all three members.
+- [`replication-validation.txt`](./evidence/replication-validation.txt), containing the successful majority-write and three-member replication results.
 
 Each member limits its WiredTiger internal cache to `0.256` GB because three database processes share one laptop. This is a resource bound for the local exercise, not a production capacity recommendation.
 
-The remaining implementation will add fixed synthetic paper records, majority-acknowledged writes, replication validation, primary failover, a post-failover write, member rejoin evidence and selected screenshots.
+The remaining implementation will add primary failover, a post-failover majority write, member rejoin evidence and selected screenshots.
 
 ## Planned evidence
 
@@ -112,6 +115,33 @@ docker compose \
   mongosh --quiet \
   --file /portfolio5/mongodb/validate-topology.js
 ```
+
+### Seed and verify replication
+
+Run the deterministic baseline write through a replica-set connection containing all three internal hosts:
+
+```bash
+docker compose \
+  -f portfolio-5-distributed-cloud-301914822/docker-compose.yml \
+  exec -T mongo1 \
+  mongosh --quiet \
+  "mongodb://mongo1:27017,mongo2:27017,mongo3:27017/?replicaSet=nubian-rs" \
+  --file /portfolio5/mongodb/seed-majority-write.js
+```
+
+The seed script is safe to rerun. It resets only the dedicated Portfolio 5 `papers` collection before inserting the fixed baseline document.
+
+Verify the document independently on the primary and both secondaries:
+
+```bash
+docker compose \
+  -f portfolio-5-distributed-cloud-301914822/docker-compose.yml \
+  exec -T mongo1 \
+  mongosh --quiet \
+  --file /portfolio5/mongodb/validate-replication.js
+```
+
+The validator uses secondary read preference, majority read concern and bounded per-member timeouts. Matching snapshots prove that each specific member applied the baseline document; majority write acknowledgement alone would establish only the required majority.
 
 Pause the exercise without deleting its named volumes:
 
