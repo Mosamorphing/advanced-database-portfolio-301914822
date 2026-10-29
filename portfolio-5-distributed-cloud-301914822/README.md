@@ -75,7 +75,7 @@ The deployment tranche provides:
 
 Each member limits its WiredTiger internal cache to `0.256` GB because three database processes share one laptop. This is a resource bound for the local exercise, not a production capacity recommendation.
 
-The scripted implementation and text evidence are complete. Selected screenshots can be added to the final portfolio document without changing the test itself.
+The scripted implementation, text evidence and selected screenshots are complete.
 
 ## Evidence captured
 
@@ -87,6 +87,12 @@ The evidence shows:
 - A successful majority write while two members remain available.
 - The restarted member receiving the post-failover record.
 - Final member roles and identical two-record snapshots.
+
+### Screenshot evidence
+
+- [`replica-set-baseline-validation.png`](./evidence/replica-set-baseline-validation.png) shows the initial three-member topology, majority-write seed and baseline replication checks.
+- [`failover-majority-write-and-recovery.png`](./evidence/failover-majority-write-and-recovery.png) shows the replacement-primary election, post-failover majority write, restarted member and replicated records.
+- [`failover-final-result.png`](./evidence/failover-final-result.png) records the final rejoin and successful completion messages.
 
 ## Reproduction: deployment and topology
 
