@@ -47,13 +47,13 @@ The database supports operations such as:
 
 ### Scope of Portfolio 1
 
-The database model developed in this activity covers the core research-publication domain: users, institutions, research fields, categories, papers, keywords, moderation, and comments. Authentication infrastructure, donations, project-showcase submissions, email delivery, and frontend implementation are outside the scope of this activity.
+The database model developed in this activity covers the core research-publication domain: users, institutions, research fields, categories, papers, keywords, moderation, and comments. Authentication infrastructure, file-storage implementation, external communications, frontend implementation, and unrelated platform features are outside the scope of this activity.
 
-Nubian Research has been in operation since December 2024. The database models, analysis, implementation evidence, and explanations presented in this portfolio are produced specifically for this individual assessment.
+The database models, analysis, implementation evidence, and explanations presented in this portfolio are produced specifically for this individual assessment.
 
 ## ER Diagram
 
-The proposed entity-relationship model is documented in the [ER diagram](./er-diagram.md).
+The entity-relationship model is documented in the [ER diagram](./er-diagram.md).
 
 ## Relational Schema, Keys and Constraints
 

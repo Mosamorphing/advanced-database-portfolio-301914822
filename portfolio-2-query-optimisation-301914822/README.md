@@ -28,14 +28,14 @@ Together, the queries exercise filtering, sorting, joins, many-to-many traversal
 
 ## Optimisation approach
 
-The work will proceed in four stages:
+The completed optimisation exercise follows four stages:
 
 1. Load a reproducible synthetic dataset large enough for PostgreSQL to make meaningful planning decisions.
 2. Execute the queries and record their results and baseline plans using `EXPLAIN (ANALYZE, BUFFERS)`.
 3. Add only indexes justified by observed access patterns and execution-plan evidence.
 4. Execute the same queries again and compare plan operations, execution time, rows processed, and buffer usage.
 
-Primary-key and unique-constraint indexes created by Portfolio 1 remain part of the baseline. Any additional index must have a stated purpose; an index will not be retained merely because it exists.
+Primary-key and unique-constraint indexes created by Portfolio 1 remain part of the baseline. Additional indexes are retained only when their purpose is supported by observed access patterns and execution-plan evidence.
 
 ## Evidence
 
@@ -50,4 +50,4 @@ This portfolio provides:
 
 ## Reproducibility
 
-The completed activity will run against PostgreSQL 17. Its scripts and execution order will be documented so that the schema, data, queries, indexes, and evidence can be reproduced without access to Nubian Research's live systems.
+The completed activity uses PostgreSQL 17. Its scripts and execution order are documented so that the schema, data, queries, indexes, and evidence can be reproduced without access to Nubian Research's live systems.

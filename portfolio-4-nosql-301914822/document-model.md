@@ -200,9 +200,9 @@ Comments are referenced through `paperId` because their number can grow independ
 
 Replies remain flat in the same collection and use `parentCommentId`. This avoids an indefinitely deep nested reply structure.
 
-## Planned indexes
+## Implemented indexes
 
-The implementation will create only indexes tied to the declared access patterns:
+The implementation creates only indexes tied to the declared access patterns:
 
 | Collection | Index keys | Reason |
 | --- | --- | --- |
@@ -214,9 +214,9 @@ The implementation will create only indexes tied to the declared access patterns
 
 ## Validation and consistency boundaries
 
-MongoDB `$jsonSchema` validation will enforce required fields, BSON types, non-empty strings, allowed status values and at least one author per paper. Requiring one author is a rule of this Portfolio 4 model rather than a constraint already enforced by the Portfolio 1 schema.
+MongoDB `$jsonSchema` validation enforces required fields, BSON types, non-empty strings, allowed status values and at least one author per paper. Requiring one author is a rule of this Portfolio 4 model rather than a constraint already enforced by the Portfolio 1 schema.
 
-For continuity, the validator will retain the relevant Portfolio 1 length limits for document references, titles, names and keywords. A non-null ORCID will retain the Portfolio 1 format. `parentCommentId` will be required but nullable so every comment explicitly identifies itself as either top-level or a reply.
+For continuity, the validator retains the relevant Portfolio 1 length limits for document references, titles, names and keywords. A non-null ORCID retains the Portfolio 1 format. `parentCommentId` is required but nullable so every comment explicitly identifies itself as either top-level or a reply.
 
 Document validation cannot provide all the relational guarantees from Portfolio 1. In particular, it cannot by itself ensure that:
 
@@ -227,9 +227,9 @@ Document validation cannot provide all the relational guarantees from Portfolio 
 - `updatedAt` is not earlier than `submittedAt` or `createdAt`;
 - duplicated author, institution, category or keyword names agree across every paper.
 
-The Portfolio 1 schema did not require exactly one corresponding author, so this model does not present that as an inherited rule. Each author item must contain a Boolean `isCorrespondingAuthor` value, while the seeded examples will identify one corresponding author.
+The Portfolio 1 schema did not require exactly one corresponding author, so this model does not present that as an inherited rule. Each author item must contain a Boolean `isCorrespondingAuthor` value, while the seeded examples identify one corresponding author.
 
-Later deterministic seed and data-validation scripts will check the cross-document and date assumptions needed by this assessment. A real application would need to enforce the remaining rules in its write logic. Identifiers for users, authors, institutions, fields, categories and keywords are logical, type-checked values in this deliberately two-collection model; MongoDB does not verify them against separate master collections.
+The deterministic seed and data-validation scripts check the cross-document and date assumptions needed by this assessment. A real application would need to enforce the remaining rules in its write logic. Identifiers for users, authors, institutions, fields, categories and keywords are logical, type-checked values in this deliberately two-collection model; MongoDB does not verify them against separate master collections.
 
 ## Suitability and limitations
 

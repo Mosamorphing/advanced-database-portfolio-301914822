@@ -21,13 +21,13 @@ client*─┼─ mongo2:27017  ─┼─ replica set nubian-rs│
           volume 1       volume 2       volume 3
 ```
 
-`client*` represents `mongosh` running inside a replica-set container on the private Docker network. The database ports will not be published to the macOS host.
+`client*` represents `mongosh` running inside a replica-set container on the private Docker network. The database ports are not published to the macOS host.
 
 Each container is a voting, data-bearing member with its own persistent volume. No arbiter is needed because all three members store data and collectively provide an odd number of votes.
 
 Because three `mongod` processes share one laptop, each member limits its WiredTiger internal cache to `0.256` GB. This prevents the local exercise from treating host memory as though each container were the only database process; it is not a production sizing recommendation.
 
-The internal client connection string will list all three Docker hostnames and the replica-set name. That allows the MongoDB client to discover the current primary after an election instead of sending writes to one permanently fixed hostname.
+The internal client connection string lists all three Docker hostnames and the replica-set name. That allows the MongoDB client to discover the current primary after an election instead of sending writes to one permanently fixed hostname.
 
 ## Member roles and majority
 

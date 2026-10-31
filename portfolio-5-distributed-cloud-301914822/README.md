@@ -185,9 +185,9 @@ docker compose \
 
 ## Data and security declaration
 
-Only fixed fictional records created for this assessment will be used. No production or externally sourced dataset will be copied into the deployment.
+Only fixed fictional records created for this assessment are used. No production or externally sourced dataset is copied into the deployment.
 
-Authentication and transport encryption will be omitted only inside a dedicated internal Docker network to keep the exercise reproducible. MongoDB ports will not be published to the host, and `mongosh` validation commands will run inside a replica-set container. A production deployment would require authenticated members, encrypted connections, managed secrets, access controls, monitoring and tested backup procedures.
+Authentication and transport encryption are omitted only inside a dedicated internal Docker network to keep the exercise reproducible. MongoDB ports are not published to the host, and `mongosh` validation commands run inside a replica-set container. A production deployment would require authenticated members, encrypted connections, managed secrets, access controls, monitoring and tested backup procedures.
 
 ## Scope and deployment boundary
 

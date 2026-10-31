@@ -1,6 +1,6 @@
 # Entity-Relationship Diagram
 
-This diagram models the core research-publication domain selected for Portfolio 1; a proposed advanced database design for the case study.
+This diagram models the core research-publication domain selected for Portfolio 1 as an advanced database design for the case study.
 
 ```mermaid
 erDiagram

@@ -1,6 +1,6 @@
 # Relational Schema, Keys and Constraints
 
-This document translates the proposed ER model into relations. The names use plural `snake_case` to match the PostgreSQL implementation in [`sql/schema.sql`](./sql/schema.sql).
+This document translates the ER model into relations. The names use plural `snake_case` to match the PostgreSQL implementation in [`sql/schema.sql`](./sql/schema.sql).
 
 ## Relational schema
 
@@ -151,7 +151,7 @@ Two rules cannot be expressed reliably using ordinary row-level keys and checks 
 - Every paper must have at least one row in `paper_authors`.
 - A paper's current status must agree with the applicable moderation decision.
 
-These rules cross table or transaction boundaries. They should be enforced by a database transaction or deferred database trigger and will be relevant to the transaction analysis in Portfolio 3.
+These rules cross table or transaction boundaries. They require a database transaction or deferred database trigger; Portfolio 3 examines the corresponding transaction and concurrency implications using synthetic assessment operations.
 
 ## Deletion behaviour
 
